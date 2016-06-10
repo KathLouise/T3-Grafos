@@ -895,6 +895,8 @@ int cordal(grafo g){
 //
 // não verifica se g é bipartido; caso não seja, o comportamento é indefinido
 
+// LINK do algoritmo: https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm#Algorithm
+
 grafo emparelhamento_maximo(grafo g){
     return g;
 }
