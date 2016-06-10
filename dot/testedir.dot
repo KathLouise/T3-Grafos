@@ -1,0 +1,12 @@
+strict digraph "emacs24" {
+    rankdir=LR;
+    concentrate=true;
+    node [shape=box];
+    "emacs24" -> "emacs24-bin-common" [color=blue];
+    "emacs24-bin-common" -> "emacs24-common" [color=blue];
+    "emacs24-common" -> "emacsen-common" [color=blue];
+    "emacs24-common" -> "dpkg" [color=blue];
+    "emacs24-bin-common" -> "liblockfile1" [color=blue];
+    "emacs24" -> "libcairo2" [color=blue];
+    "emacs24" -> "libgdk-pixbuf2.0-0" [color=blue];
+}

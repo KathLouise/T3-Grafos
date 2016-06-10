@@ -1,0 +1,8 @@
+strict graph "kiteCordal" {
+    A -- B
+    A -- C
+    B -- D
+    B -- C
+    D -- E
+    C -- D
+}

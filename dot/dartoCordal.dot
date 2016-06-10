@@ -1,0 +1,8 @@
+strict graph "dartoCordal" {
+    A -- B
+    B -- C
+    B -- D
+    B -- E
+    C -- D
+    D -- E
+}

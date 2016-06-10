@@ -1,0 +1,14 @@
+strict graph "naoCordal" {
+    A -- B
+    A -- C
+    A -- D
+    A -- E
+    B -- C
+    B -- F
+    B -- E
+    C -- D
+    C -- F
+    D -- F
+    D -- E
+    E -- F
+}

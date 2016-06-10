@@ -1,0 +1,9 @@
+strict graph "pirulitoCordal" {
+    A -- B
+    A -- C
+    A -- D
+    B -- D
+    B -- C
+    C -- D
+    D -- E
+}

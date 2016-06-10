@@ -1,0 +1,9 @@
+strict graph "32fanCordal" {
+    A -- B
+    A -- C
+    B -- D
+    B -- E
+    B -- C
+    C -- D
+    C -- E
+}

@@ -1,0 +1,7 @@
+strict graph "cricketCordal" {
+    A -- B
+    A -- C
+    B -- C
+    C -- D
+    C -- E
+}

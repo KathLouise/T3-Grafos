@@ -1,0 +1,13 @@
+strict graph "paises-menores" {
+	Afghanistan -- China
+    Afghanistan -- Iran
+    Afghanistan -- Pakistan
+    China -- "Hong Kong"
+    China -- India
+    China -- Kazakhstan
+    Iran -- Iraq
+    Iran -- Pakistan
+    Iran -- Turkey
+    India -- Nepal
+    India -- Pakistan
+}

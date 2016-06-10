@@ -1,0 +1,6 @@
+strict graph "garfoCordal" {
+    A -- B
+    B -- C
+    B -- D
+    D -- E
+}

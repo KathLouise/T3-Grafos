@@ -1,0 +1,6 @@
+strict graph "5starCordal" {
+    A -- B
+    B -- C
+    C -- D
+    C -- E
+}

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+./teste < dot/4pathCordal.dot
+./teste < dot/5pathCordal.dot
+./teste < dot/5starCordal.dot
+./teste < dot/32fanCordal.dot
+./teste < dot/32poleCordal.dot
+./teste < dot/a.dot
+./teste < dot/b.dot
+./teste < dot/borboletaCordal.dot
+./teste < dot/c.dot
+./teste < dot/chordal.dot
+./teste < dot/cidades.dot
+./teste < dot/cordal.dot
+./teste < dot/cordal1.dot
+./teste < dot/cordalBull.dot
+./teste < dot/cordalCasa.dot
+./teste < dot/cordalTriangulo.dot
+./teste < dot/cricketCordal.dot
+./teste < dot/d.dot
+./teste < dot/dartoCordal.dot
+./teste < dot/diamanteCordal.dot
+./teste < dot/emacs24-dep.dot
+./teste < dot/garfoCordal.dot
+./teste < dot/jssCordal.dot
+./teste < dot/k6.dot
+./teste < dot/kiteCordal.dot
+./teste < dot/large.dot
+./teste < dot/naoCordal.dot
+./teste < dot/paises.dot
+./teste < dot/pawCordal.dot
+./teste < dot/pentagramaCordal.dot
+./teste < dot/pirulitoCordal.dot
+./teste < dot/simple.dot
+./teste < dot/teste.dot
+./teste < dot/testedir.dot

@@ -1,0 +1,7 @@
+strict graph "cordalBull" {
+    A -- B
+    B -- C
+    B -- D
+    C -- D
+    D -- F
+}

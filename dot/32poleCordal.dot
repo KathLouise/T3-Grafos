@@ -1,0 +1,7 @@
+strict graph "32poleCordal" {
+    A -- B
+    B -- C
+    C -- D
+    C -- E
+    D -- E
+}

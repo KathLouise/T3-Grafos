@@ -1,0 +1,19 @@
+nome: a
+não direcionado
+não ponderado
+5 vértices
+4 arestas
+é cordal
+strict graph "a" {
+
+   "e"
+   "d"
+   "c"
+   "b"
+   "a"
+
+   "c" -- "e"
+   "c" -- "d"
+   "b" -- "c"
+   "a" -- "b"
+}

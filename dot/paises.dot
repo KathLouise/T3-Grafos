@@ -1,0 +1,331 @@
+// mapa mundi
+//
+// cada país é um vértice
+// cada aresta indica existência de fronteira terrestre entre os países
+
+strict graph "mapa-mundi" {
+
+    Afghanistan -- China
+    Afghanistan -- Iran
+    Afghanistan -- Pakistan
+    Afghanistan -- Tajikistan
+    Afghanistan -- Turkmenistan
+    Afghanistan -- Uzbekistan
+    Akrotiri -- Cyprus
+    Albania -- Greece
+    Albania -- Kosovo
+    Albania -- Macedonia
+    Albania -- Montenegro
+    Algeria -- Libya
+    Algeria -- Mali
+    Algeria -- Mauritania
+    Algeria -- Morocco
+    Algeria -- Niger
+    Algeria -- Tunisia
+    Algeria -- "Western Sahara"
+    Andorra -- France
+    Andorra -- Spain
+    Angola -- "Democratic Republic of the Congo"
+    Angola -- Namibia
+    Angola -- "Republic of the Congo"
+    Angola -- Zambia
+    Argentina -- Bolivia
+    Argentina -- Brazil
+    Argentina -- Chile
+    Argentina -- Paraguay
+    Argentina -- Uruguay
+    Armenia -- Azerbaijan
+    Armenia -- Georgia
+    Armenia -- Iran
+    Armenia -- Turkey
+    Austria -- "Czech Republic"
+    Austria -- Germany
+    Austria -- Hungary
+    Austria -- Italy
+    Austria -- Liechtenstein
+    Austria -- Slovakia
+    Austria -- Slovenia
+    Austria -- Switzerland
+    Azerbaijan -- Georgia
+    Azerbaijan -- Iran
+    Azerbaijan -- Russia
+    Azerbaijan -- Turkey
+    Bangladesh -- Burma
+    Bangladesh -- India
+    Belarus -- Latvia
+    Belarus -- Lithuania
+    Belarus -- Poland
+    Belarus -- Russia
+    Belarus -- Ukraine
+    Belgium -- France
+    Belgium -- Germany
+    Belgium -- Luxembourg
+    Belgium -- Netherlands
+    Belize -- Guatemala
+    Belize -- Mexico
+    Benin -- "Burkina Faso"
+    Benin -- Niger
+    Benin -- Nigeria
+    Benin -- Togo
+    Bhutan -- China
+    Bhutan -- India
+    Bolivia -- Brazil
+    Bolivia -- Chile
+    Bolivia -- Paraguay
+    Bolivia -- Peru
+    "Bosnia and Herzegovina" -- Croatia
+    "Bosnia and Herzegovina" -- Montenegro
+    "Bosnia and Herzegovina" -- Serbia
+    Botswana -- Namibia
+    Botswana -- "South Africa"
+    Botswana -- Zimbabwe
+    Brazil -- Colombia
+    Brazil -- France
+    Brazil -- Guyana
+    Brazil -- Paraguay
+    Brazil -- Peru
+    Brazil -- Suriname
+    Brazil -- Uruguay
+    Brazil -- Venezuela
+    Brunei -- Malaysia
+    Bulgaria -- Greece
+    Bulgaria -- Macedonia
+    Bulgaria -- Romania
+    Bulgaria -- Serbia
+    Bulgaria -- Turkey
+    "Burkina Faso" -- "Cote d'Ivoire"
+    "Burkina Faso" -- Ghana
+    "Burkina Faso" -- Mali
+    "Burkina Faso" -- Niger
+    "Burkina Faso" -- Togo
+    Burma -- China
+    Burma -- India
+    Burma -- Laos
+    Burma -- Thailand
+    Burundi -- "Democratic Republic of the Congo"
+    Burundi -- Rwanda
+    Burundi -- Tanzania
+    Cambodia -- Laos
+    Cambodia -- Thailand
+    Cambodia -- Vietnam
+    Cameroon -- "Central African Republic"
+    Cameroon -- Chad
+    Cameroon -- "Equatorial Guinea"
+    Cameroon -- Gabon
+    Cameroon -- Nigeria
+    Cameroon -- "Republic of the Congo"
+    Canada -- "United States"
+    "Central African Republic" -- Chad
+    "Central African Republic" -- "Democratic Republic of the Congo"
+    "Central African Republic" -- "Republic of the Congo"
+    "Central African Republic" -- Sudan
+    Chad -- Libya
+    Chad -- Niger
+    Chad -- Nigeria
+    Chad -- Sudan
+    Chile -- Peru
+    China -- "Hong Kong"
+    China -- India
+    China -- Kazakhstan
+    China -- Kyrgyzstan
+    China -- Laos
+    China -- Macau
+    China -- Mongolia
+    China -- Nepal
+    China -- "North Korea"
+    China -- Pakistan
+    China -- Russia
+    China -- Tajikistan
+    China -- Vietnam
+    Colombia -- Ecuador
+    Colombia -- Panama
+    Colombia -- Peru
+    Colombia -- Venezuela
+    "Costa Rica" -- Nicaragua
+    "Costa Rica" -- Panama
+    "Cote d'Ivoire" -- Ghana
+    "Cote d'Ivoire" -- Guinea
+    "Cote d'Ivoire" -- Liberia
+    "Cote d'Ivoire" -- Mali
+    Croatia -- Hungary
+    Croatia -- Montenegro
+    Croatia -- Serbia
+    Croatia -- Slovenia
+    Cyprus -- Dhekelia
+    "Czech Republic" -- Germany
+    "Czech Republic" -- Poland
+    "Czech Republic" -- Slovakia
+    "Democratic Republic of the Congo" -- "Republic of the Congo"
+    "Democratic Republic of the Congo" -- Rwanda
+    "Democratic Republic of the Congo" -- Sudan
+    "Democratic Republic of the Congo" -- Tanzania
+    "Democratic Republic of the Congo" -- Uganda
+    "Democratic Republic of the Congo" -- Zambia
+    Denmark -- Germany
+    Djibouti -- Eritrea
+    Djibouti -- Ethiopia
+    Djibouti -- Somalia
+    "Dominican Republic" -- Haiti
+    Ecuador -- Peru
+    Egypt -- "Gaza Strip"
+    Egypt -- Israel
+    Egypt -- Libya
+    Egypt -- Sudan
+    "El Salvador" -- Guatemala
+    "El Salvador" -- Honduras
+    "Equatorial Guinea" -- Gabon
+    Eritrea -- Ethiopia
+    Eritrea -- Sudan
+    Estonia -- Latvia
+    Estonia -- Russia
+    Ethiopia -- Kenya
+    Ethiopia -- Somalia
+    Ethiopia -- Sudan
+    Finland -- Norway
+    Finland -- Russia
+    Finland -- Sweden
+    France -- Germany
+    France -- Italy
+    France -- Luxembourg
+    France -- Monaco
+    France -- Spain
+    France -- Suriname
+    France -- Switzerland
+    Gabon -- "Republic of the Congo"
+    "Gaza Strip" -- Israel
+    Georgia -- Russia
+    Georgia -- Turkey
+    Germany -- Luxembourg
+    Germany -- Netherlands
+    Germany -- Poland
+    Germany -- Switzerland
+    Ghana -- Togo
+    Gibraltar -- Spain
+    Greece -- Macedonia
+    Greece -- Turkey
+    Guatemala -- Honduras
+    Guatemala -- Mexico
+    "Guinea-Bissau" -- Senegal
+    Guinea -- "Guinea-Bissau"
+    Guinea -- Liberia
+    Guinea -- Mali
+    Guinea -- Senegal
+    Guinea -- "Sierra Leone"
+    Guyana -- Suriname
+    Guyana -- Venezuela
+    Honduras -- Nicaragua
+    Hungary -- Romania
+    Hungary -- Serbia
+    Hungary -- Slovakia
+    Hungary -- Slovenia
+    Hungary -- Ukraine
+    India -- Nepal
+    India -- Pakistan
+    Indonesia -- Malaysia
+    Indonesia -- "Papua New Guinea"
+    Indonesia -- "Timor-Leste"
+    Iran -- Iraq
+    Iran -- Pakistan
+    Iran -- Turkey
+    Iran -- Turkmenistan
+    Iraq -- Jordan
+    Iraq -- Kuwait
+    Iraq -- "Saudi Arabia"
+    Iraq -- Syria
+    Iraq -- Turkey
+    Ireland -- "United Kingdom"
+    Israel -- Jordan
+    Israel -- Lebanon
+    Israel -- Syria
+    Israel -- "West Bank"
+    Italy -- "San Marino"
+    Italy -- Slovenia
+    Italy -- Switzerland
+    Italy -- "Vatican City"
+    Jordan -- "Saudi Arabia"
+    Jordan -- Syria
+    Jordan -- "West Bank"
+    Kazakhstan -- Kyrgyzstan
+    Kazakhstan -- Russia
+    Kazakhstan -- Turkmenistan
+    Kazakhstan -- Uzbekistan
+    Kenya -- Somalia
+    Kenya -- Sudan
+    Kenya -- Tanzania
+    Kenya -- Uganda
+    Kosovo -- Macedonia
+    Kosovo -- Montenegro
+    Kosovo -- Serbia
+    Kuwait -- "Saudi Arabia"
+    Kyrgyzstan -- Tajikistan
+    Kyrgyzstan -- Uzbekistan
+    Laos -- Thailand
+    Laos -- Vietnam
+    Latvia -- Lithuania
+    Latvia -- Russia
+    Lebanon -- Syria
+    Lesotho -- "South Africa"
+    Liberia -- "Sierra Leone"
+    Libya -- Niger
+    Libya -- Sudan
+    Libya -- Tunisia
+    Liechtenstein -- Switzerland
+    Lithuania -- Poland
+    Lithuania -- Russia
+    Macedonia -- Serbia
+    Malawi -- Mozambique
+    Malawi -- Tanzania
+    Malawi -- Zambia
+    Malaysia -- Thailand
+    Mali -- Mauritania
+    Mali -- Niger
+    Mali -- Senegal
+    Mauritania -- Senegal
+    Mauritania -- "Western Sahara"
+    Mexico -- "United States"
+    Moldova -- Romania
+    Moldova -- Ukraine
+    Mongolia -- Russia
+    Montenegro -- Serbia
+    Morocco -- Spain
+    Morocco -- "Western Sahara"
+    Mozambique -- "South Africa"
+    Mozambique -- Swaziland
+    Mozambique -- Tanzania
+    Mozambique -- Zambia
+    Mozambique -- Zimbabwe
+    Namibia -- "South Africa"
+    Namibia -- Zambia
+    "Netherlands Antilles" -- "Saint Martin"
+    Niger -- Nigeria
+    "North Korea" -- Russia
+    "North Korea" -- "South Korea"
+    Norway -- Russia
+    Norway -- Sweden
+    Oman -- "Saudi Arabia"
+    Oman -- "United Arab Emirates"
+    Oman -- Yemen
+    Poland -- Russia
+    Poland -- Slovakia
+    Poland -- Ukraine
+    Portugal -- Spain
+    Qatar -- "Saudi Arabia"
+    Romania -- Serbia
+    Romania -- Ukraine
+    Russia -- Ukraine
+    Rwanda -- Tanzania
+    Rwanda -- Uganda
+    "Saudi Arabia" -- "United Arab Emirates"
+    "Saudi Arabia" -- Yemen
+    Senegal -- "The Gambia"
+    Slovakia -- Ukraine
+    "South Africa" -- Swaziland
+    "South Africa" -- Zimbabwe
+    Sudan -- Uganda
+    Syria -- Turkey
+    Tajikistan -- Uzbekistan
+    Tanzania -- Uganda
+    Tanzania -- Zambia
+    Turkmenistan -- Uzbekistan
+    Zambia -- Zimbabwe
+}

@@ -1,0 +1,6 @@
+strict graph "5pathCordal" {
+    A -- B
+    B -- C
+    C -- D
+    D -- E
+}

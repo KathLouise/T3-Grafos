@@ -1,0 +1,10 @@
+strict graph "cordalCasa" {
+    A -- B
+    A -- C
+    B -- C
+    B -- D
+    B -- E
+    C -- D
+    C -- E
+    D -- E
+}
