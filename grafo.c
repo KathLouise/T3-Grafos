@@ -120,6 +120,7 @@ lista constroi_lista(void) {
   l->tamanho = 0;
 
   return l;
+  free(l);
 }
 //---------------------------------------------------------------------------
 // desaloca a lista l e todos os seus nós
@@ -170,6 +171,7 @@ no insere_lista(void *conteudo, lista l) {
   ++l->tamanho;
   
   return l->primeiro = novo;
+  free(novo);
 }
 
 //------------------------------------------------------------------------------
