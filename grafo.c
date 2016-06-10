@@ -16,7 +16,6 @@
 // nó de lista encadeada cujo conteúdo é um void *
 
 struct no {
-
   void *conteudo;
   no proximo;
 };
@@ -24,7 +23,6 @@ struct no {
 // lista encadeada
 
 struct lista {
-  
   unsigned int tamanho;
   int padding; // só pra evitar warning 
   no primeiro;
