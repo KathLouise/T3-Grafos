@@ -3,7 +3,7 @@ strict graph "4MaximumMatching" {
     A -- F
     B -- G
     B -- H
-    B -- E
+    C -- E
     C -- H
     D -- F
 }
