@@ -1,0 +1,9 @@
+strict graph "4MaximumMatching" {
+    A -- E
+    A -- F
+    B -- G
+    B -- H
+    B -- E
+    C -- H
+    D -- F
+}
