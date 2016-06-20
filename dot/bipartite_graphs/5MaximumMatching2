@@ -1,0 +1,12 @@
+strict graph "5MaximumMatching2" {
+	A -- F
+	A -- G
+	B -- F
+	B -- J
+	C -- H
+	C -- I
+	D -- F
+	D -- J
+	E -- G
+	E -- I
+}
