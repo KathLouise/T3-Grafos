@@ -63,6 +63,8 @@ struct vertice{
     int removido; // se for 1 a aresta do grafo foi removida, se for 0, nao
     int tamRotulo; //tamanho do vetor de rotulos atual 
     int passado; //se foi passado 1, senao 0
+    int visitado; //se o vertice foi visitado, muda para 1, senão permanece em 0
+    int coberto; // se o vertice esta conectado com uma aresta, muda para 1, senão permanece em zero
     unsigned int *rotulo; //rotulo do vertice {1..n}
     lista adjacencias_entrada;
     lista adjacencias_saida;
@@ -299,6 +301,8 @@ static vertice cria_vertice(grafo g, const char *nome){
         v->grau_entrada = 0;
         v->grau_saida = 0;
         v->removido = 0;
+        v->visitado = 0;
+        v->coberto = 0;
         v->rotulo = NULL;
         g->vertices[v->id] = v;
         g->n_vertices++;
