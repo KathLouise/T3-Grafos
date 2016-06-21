@@ -884,11 +884,25 @@ int ordem_perfeita_eliminacao(lista l, grafo g){
     }
     return 1;
 }
+//------------------------------------------------------------------------------
+// devolve 1, se g é um grafo cordal ou
+//         0, caso contrário
 
-static int adicionaConjunto(lista conj,grafo g){
+int cordal(grafo g){
+    grafo copy = copia_grafo(g);
+    lista lexica = busca_largura_lexicografica(copy);
+    return ordem_perfeita_eliminacao(lexica,copy);
+    free(copy);
+    free(lexica);
+}
+
+
+
+static int adicionaConjunto(lista conjOrigem, lista conjDestino, grafo g){
     int terminado = 1;
-    for(no pai=primeiro_no(conj); pai!=NULL; pai=proximo_no(pai)){
+    for(no pai=primeiro_no(conjOrigem); pai!=NULL; pai=proximo_no(pai)){
         vertice auxV = conteudo(pai);
+        printf("Pai : %s\n",auxV->nome);
         if(auxV->passado == 0){
             terminado = 0;
             auxV->passado = 1;
@@ -896,7 +910,8 @@ static int adicionaConjunto(lista conj,grafo g){
             for(no filho=primeiro_no(filhos); filho!=NULL; filho=proximo_no(filho)){
                 vertice auxVa = conteudo(filho);
                 if(auxVa->inSet != 1){
-                    insere_lista(auxVa,conj);        
+                    printf("Filho: %s\n",auxVa->nome);
+                    insere_lista(auxVa,conjDestino);        
                     auxVa->inSet = 1;
                 }
             }       
@@ -917,25 +932,17 @@ static void bipartido(lista conjA, lista conjB, grafo g){
         insere_lista(auxV,conjB);   
         auxV->inSet = 1;     
     }
+    v->inSet = 1;
     v->passado = 1;
     while(!terminado){
         terminado = 1;
-        terminado = adicionaConjunto(conjB,g);
-        terminado = adicionaConjunto(conjA,g);
+        terminado = adicionaConjunto(conjB, conjA, g);
+        terminado = adicionaConjunto(conjA, conjB, g);
     }
 }
 
-//------------------------------------------------------------------------------
-// devolve 1, se g é um grafo cordal ou
-//         0, caso contrário
 
-int cordal(grafo g){
-    grafo copy = copia_grafo(g);
-    lista lexica = busca_largura_lexicografica(copy);
-    return ordem_perfeita_eliminacao(lexica,copy);
-    free(copy);
-    free(lexica);
-}
+
 //------------------------------------------------------------------------------
 // devolve um grafo cujos vertices são cópias de vértices do grafo
 // bipartido g e cujas arestas formam um emparelhamento máximo em g
@@ -948,6 +955,17 @@ grafo emparelhamento_maximo(grafo g){
     lista conjA = constroi_lista();
     lista conjB = constroi_lista();
     bipartido(conjA,conjB,g);
+    printf("Conjunto A:\n");
+    for(no auxVizVa=primeiro_no(conjA); auxVizVa!=NULL; auxVizVa=proximo_no(auxVizVa)){
+        vertice auxVa = conteudo(auxVizVa);
+        printf("%s\n",auxVa->nome);
+    }
+
+    printf("\n\nConjunto B:\n");
+    for(no auxVizVb=primeiro_no(conjB); auxVizVb!=NULL; auxVizVb=proximo_no(auxVizVb)){
+        vertice auxVb = conteudo(auxVizVb);
+        printf("%s\n",auxVb->nome);
+    }
     return g;
 }
 

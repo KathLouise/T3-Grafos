@@ -18,7 +18,7 @@ int main(void) {
   printf("%d vértices\n", n_vertices(g));
   printf("%d arestas\n", n_arestas(g));
 
-  //grafo emparelhamento = emparelhamento_maximo(g);
+  grafo emparelhamento = emparelhamento_maximo(g);
   //escreve_grafo(stdout,emparelhamento);
   escreve_grafo(stdout, g);
   //return ! (destroi_grafo(emparelhamento) && destroi_grafo(g));
