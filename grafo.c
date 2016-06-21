@@ -60,13 +60,14 @@ struct vertice{
     unsigned int id; // id = posição do vertice no vetor de vertices do grafo, serve para facilitar a busca de vertices
     unsigned int grau_entrada; // grau do vertice
     unsigned int grau_saida; // grau do vertice
+    int padding;
+    unsigned int *rotulo; //rotulo do vertice {1..n}
     int removido; // se for 1 a aresta do grafo foi removida, se for 0, nao
     int tamRotulo; //tamanho do vetor de rotulos atual 
     int passado; //se foi passado 1, senao 0
     int visitado; //se o vertice foi visitado, muda para 1, senão permanece em 0
     int coberto; // se o vertice esta conectado com uma aresta, muda para 1, senão permanece em zero
     int inSet; //se o vertice ja pertence a um conjunto, muda para 1, senão permanece em zero
-    unsigned int *rotulo; //rotulo do vertice {1..n}
     lista adjacencias_entrada;
     lista adjacencias_saida;
 };
@@ -884,6 +885,46 @@ int ordem_perfeita_eliminacao(lista l, grafo g){
     return 1;
 }
 
+static int adicionaConjunto(lista conj,grafo g){
+    int terminado = 1;
+    for(no pai=primeiro_no(conj); pai!=NULL; pai=proximo_no(pai)){
+        vertice auxV = conteudo(pai);
+        if(auxV->passado == 0){
+            terminado = 0;
+            auxV->passado = 1;
+            lista filhos = vizinhanca(auxV,0,g);
+            for(no filho=primeiro_no(filhos); filho!=NULL; filho=proximo_no(filho)){
+                vertice auxVa = conteudo(filho);
+                if(auxVa->inSet != 1){
+                    insere_lista(auxVa,conj);        
+                    auxVa->inSet = 1;
+                }
+            }       
+        }
+    }
+    return terminado;
+}
+
+static void bipartido(lista conjA, lista conjB, grafo g){
+    int terminado = 0;
+    vertice auxV = NULL;
+    vertice *vertices = g->vertices;
+    vertice v = vertices[0];        
+    insere_lista(v,conjA);
+    lista filhos = vizinhanca(v,0,g);
+    for(no auxVizV=primeiro_no(filhos); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
+        auxV = conteudo(auxVizV);
+        insere_lista(auxV,conjB);   
+        auxV->inSet = 1;     
+    }
+    v->passado = 1;
+    while(!terminado){
+        terminado = 1;
+        terminado = adicionaConjunto(conjB,g);
+        terminado = adicionaConjunto(conjA,g);
+    }
+}
+
 //------------------------------------------------------------------------------
 // devolve 1, se g é um grafo cordal ou
 //         0, caso contrário
@@ -904,6 +945,9 @@ int cordal(grafo g){
 // LINK do algoritmo: https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm#Algorithm
 
 grafo emparelhamento_maximo(grafo g){
+    lista conjA = constroi_lista();
+    lista conjB = constroi_lista();
+    bipartido(conjA,conjB,g);
     return g;
 }
 
