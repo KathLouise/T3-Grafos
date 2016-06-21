@@ -65,6 +65,7 @@ struct vertice{
     int passado; //se foi passado 1, senao 0
     int visitado; //se o vertice foi visitado, muda para 1, senão permanece em 0
     int coberto; // se o vertice esta conectado com uma aresta, muda para 1, senão permanece em zero
+    int inSet; //se o vertice ja pertence a um conjunto, muda para 1, senão permanece em zero
     unsigned int *rotulo; //rotulo do vertice {1..n}
     lista adjacencias_entrada;
     lista adjacencias_saida;
@@ -304,6 +305,7 @@ static vertice cria_vertice(grafo g, const char *nome){
         v->visitado = 0;
         v->coberto = 0;
         v->rotulo = NULL;
+        v->inSet = 0;
         g->vertices[v->id] = v;
         g->n_vertices++;
 
