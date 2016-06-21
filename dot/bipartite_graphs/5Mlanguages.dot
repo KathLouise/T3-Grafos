@@ -1,0 +1,13 @@
+strict graph "5Mlanguages" {
+	R -- F
+	R -- E
+	S -- G
+	S -- J
+	T -- F
+	T -- G
+	U -- E
+	U -- I
+	V -- I
+	V -- E
+	V -- J
+}
