@@ -60,7 +60,7 @@ struct vertice{
     unsigned int id; // id = posição do vertice no vetor de vertices do grafo, serve para facilitar a busca de vertices
     unsigned int grau_entrada; // grau do vertice
     unsigned int grau_saida; // grau do vertice
-    int padding;
+    int set; //qual conjunto da bipartição o vertice pertence
     unsigned int *rotulo; //rotulo do vertice {1..n}
     int removido; // se for 1 a aresta do grafo foi removida, se for 0, nao
     int tamRotulo; //tamanho do vetor de rotulos atual 
@@ -896,13 +896,11 @@ int cordal(grafo g){
     free(lexica);
 }
 
-
-
+//------------------------------------------------------------------------------
 static int adicionaConjunto(lista conjOrigem, lista conjDestino, grafo g){
     int terminado = 1;
     for(no pai=primeiro_no(conjOrigem); pai!=NULL; pai=proximo_no(pai)){
         vertice auxV = conteudo(pai);
-        printf("Pai : %s\n",auxV->nome);
         if(auxV->passado == 0){
             terminado = 0;
             auxV->passado = 1;
@@ -910,7 +908,6 @@ static int adicionaConjunto(lista conjOrigem, lista conjDestino, grafo g){
             for(no filho=primeiro_no(filhos); filho!=NULL; filho=proximo_no(filho)){
                 vertice auxVa = conteudo(filho);
                 if(auxVa->inSet != 1){
-                    printf("Filho: %s\n",auxVa->nome);
                     insere_lista(auxVa,conjDestino);        
                     auxVa->inSet = 1;
                 }
@@ -940,6 +937,13 @@ static void bipartido(lista conjA, lista conjB, grafo g){
         terminado = adicionaConjunto(conjA, conjB, g);
     }
 }
+static void settingConj(lista conj, int id){
+    for(no auxVizVa=primeiro_no(conj); auxVizVa!=NULL; auxVizVa=proximo_no(auxVizVa)){
+        vertice auxVa = conteudo(auxVizVa);
+	auxVa->set = id;
+        printf("%s\n",auxVa->nome);
+    }
+}
 
 static void firstMatching(lista conjA, lista edgeMatching, grafo g){
 
@@ -962,14 +966,14 @@ static void firstMatching(lista conjA, lista edgeMatching, grafo g){
         
 }
 
-static adjacencia findInMatching(lista edgeMatching, vertice v){
+/*static adjacencia findInMatching(lista edgeMatching, vertice v){
     for(no edgeNo=primeiro_no(edgeMatching); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
         adjacencia a= conteudo(edgeNo);
         if(strcmp(a->v_origem->nome, v->nome) || strcmp(a->v_destino->nome, v->nome))
             return a;
     }
     return NULL;
-}
+}*/
 
 static void resetVisitado(lista conjunto){
     for(no auxVizV=primeiro_no(conjunto); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
@@ -997,26 +1001,27 @@ static lista findAumentingPath(lista conjA, lista conjB, grafo g){
         }
         
         if(terminou != 1){
-            terminou = 1;
+            terminou = 0;
             vertice filho = NULL;
             while(terminou!=1){
+		terminou = 1;
                 lista filhos = vizinhanca(va,0,g);
+                va->visitado = 1;
                 for(no filhoNo=primeiro_no(filhos); filhoNo!=NULL; filhoNo=proximo_no(filhoNo)){
                     filho = conteudo(filhoNo);
                     if(filho->coberto==1 && filho->visitado!=1){
                         terminou = 0;
                         filho->visitado = 1;
-                        va->visitado = 1;
-                        insere_lista(filho,auxPath);
+                        insere_lista(va,auxPath);
                         
                         adjacencia viz = malloc(sizeof(struct adjacencia));                       
                         viz->v_origem = va;
                         viz->v_destino = filho;
                         insere_lista(viz,path);
-
+                	va = filho;
                         break;
                     }
-                    else{
+                    else if (filho->coberto == 0 && filho->set != 0){
                         adjacencia viz = malloc(sizeof(struct adjacencia));                       
                         viz->v_origem = va;
                         viz->v_destino = filho;
@@ -1024,14 +1029,37 @@ static lista findAumentingPath(lista conjA, lista conjB, grafo g){
                         return path;
                     }
                 }
-                va = filho;
+		if(terminou){
+		    va = conteudo(primeiro_no(auxPath));
+		    remove_no(auxPath, primeiro_no(auxPath), NULL);
+		    remove_no(path, primeiro_no(path), NULL);
+		    terminou = 0;
+		}
             }
         }
     }
-    return constroi_lista();
+    return NULL;
 }
 
+static void changeMatching(lista emp, lista path){
 
+    for(no pathNo=primeiro_no(path); pathNo!=NULL; pathNo=proximo_no(pathNo)){
+        adjacencia a_path= conteudo(pathNo);
+        for(no empNo=primeiro_no(emp); empNo!=NULL; empNo=proximo_no(empNo)){
+        	adjacencia a_emp= conteudo(empNo);
+		if(strcmp(a_path->v_origem->nome, a_emp->v_origem->nome) == 0){
+			a_emp->v_destino->coberto = 0;
+			a_emp->v_destino = a_path->v_destino;
+			a_emp->v_destino->coberto = 1;
+		}
+		else if((a_path->v_origem->coberto == 0) && (a_path->v_destino->coberto == 0)){
+			a_path->v_origem->coberto = 1;
+			a_path->v_destino->coberto = 1;
+			insere_lista(a_path, emp);
+		}
+	}
+    }
+}
 
 //------------------------------------------------------------------------------
 // devolve um grafo cujos vertices são cópias de vértices do grafo
@@ -1042,24 +1070,21 @@ static lista findAumentingPath(lista conjA, lista conjB, grafo g){
 // LINK do algoritmo: https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm#Algorithm
 
 grafo emparelhamento_maximo(grafo g){
+    grafo e = cria_grafo(g->nome, g->direcionado, g->ponderado, (int) g->n_vertices);
     lista conjA = constroi_lista();
     lista conjB = constroi_lista();
-    bipartido(conjA,conjB,g);
-    printf("Conjunto A:\n");
-    for(no auxVizVa=primeiro_no(conjA); auxVizVa!=NULL; auxVizVa=proximo_no(auxVizVa)){
-        vertice auxVa = conteudo(auxVizVa);
-        printf("%s\n",auxVa->nome);
-    }
+    lista path;
+    int aumentingPath = 1;
 
+    bipartido(conjA,conjB,g);
+   
+    printf("Conjunto A:\n");
+    settingConj(conjA, 0);
+   
     printf("\n\nConjunto B:\n");
-    for(no auxVizVb=primeiro_no(conjB); auxVizVb!=NULL; auxVizVb=proximo_no(auxVizVb)){
-        vertice auxVb = conteudo(auxVizVb);
-        printf("%s\n",auxVb->nome);
-    }
+    settingConj(conjB, 1);
 
     lista edgeMatching = constroi_lista();
-
-    
 
     firstMatching(conjA, edgeMatching, g);
 
@@ -1070,8 +1095,30 @@ grafo emparelhamento_maximo(grafo g){
         printf("Destino: %s\n",a->v_destino->nome);
     }
 
-    findAumentingPath(conjA,conjB,g);
+    while(aumentingPath){
+    	path = findAumentingPath(conjA,conjB,g);
+    	if(path != NULL){
+		printf("\n\nCaminho:\n");
+    		for(no edgeNo=primeiro_no(path); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
+       			adjacencia a= conteudo(edgeNo);
+        		printf("Origem: %s\n",a->v_origem->nome);
+        		printf("Destino: %s\n",a->v_destino->nome);
+    		}
 
-    return g;
+    		changeMatching(edgeMatching, path);
+	}
+	else{
+		aumentingPath = 0;
+	}
+    }
+
+    printf("\n\nEmparelhamentoMaximo:\n");
+    for(no edgeNo=primeiro_no(edgeMatching); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
+        adjacencia a= conteudo(edgeNo);
+        printf("Origem: %s\n",a->v_origem->nome);
+        printf("Destino: %s\n",a->v_destino->nome);
+    }
+    
+    return e;
 }
 
