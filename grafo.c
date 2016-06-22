@@ -941,6 +941,27 @@ static void bipartido(lista conjA, lista conjB, grafo g){
     }
 }
 
+static void firstMatching(lista conjA, lista edgeMatching, grafo g){
+
+    for(no auxVizV=primeiro_no(conjA); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
+        vertice v = conteudo(auxVizV);
+        lista filhos = vizinhanca(v,0,g);
+        for(no filhoNo=primeiro_no(filhos); filhoNo!=NULL; filhoNo=proximo_no(filhoNo)){
+            vertice filho = conteudo(filhoNo);
+            if(filho->coberto!=1){
+                filho->coberto = 1;
+                v->coberto = 1;
+                adjacencia viz = malloc(sizeof(struct adjacencia));
+                viz->v_origem = v;
+                viz->v_destino = filho;
+                insere_lista(viz,edgeMatching);
+                break;
+            }
+        }
+    }  
+        
+}
+
 
 
 //------------------------------------------------------------------------------
@@ -966,6 +987,20 @@ grafo emparelhamento_maximo(grafo g){
         vertice auxVb = conteudo(auxVizVb);
         printf("%s\n",auxVb->nome);
     }
+
+    lista edgeMatching = constroi_lista();
+
+    
+
+    firstMatching(conjA, edgeMatching, g);
+
+    printf("\n\nLigacoes:\n");
+    for(no edgeNo=primeiro_no(edgeMatching); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
+        adjacencia a= conteudo(edgeNo);
+        printf("Origem: %s\n",a->v_origem->nome);
+        printf("Destino: %s\n",a->v_destino->nome);
+    }
+
     return g;
 }
 
