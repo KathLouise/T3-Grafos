@@ -962,6 +962,75 @@ static void firstMatching(lista conjA, lista edgeMatching, grafo g){
         
 }
 
+static adjacencia findInMatching(lista edgeMatching, vertice v){
+    for(no edgeNo=primeiro_no(edgeMatching); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
+        adjacencia a= conteudo(edgeNo);
+        if(strcmp(a->v_origem->nome, v->nome) || strcmp(a->v_destino->nome, v->nome))
+            return a;
+    }
+    return NULL;
+}
+
+static void resetVisitado(lista conjunto){
+    for(no auxVizV=primeiro_no(conjunto); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
+        vertice va = conteudo(auxVizV);
+        va->visitado = 0;
+    }
+}
+
+static lista findAumentingPath(lista conjA, lista conjB, grafo g){
+    int terminou = 0;
+    lista auxPath = constroi_lista();
+    lista path = constroi_lista();
+
+    resetVisitado(conjA);
+    resetVisitado(conjB);
+    while(terminou!=1){
+        terminou = 1;
+        vertice va = NULL;
+        for(no auxVizV=primeiro_no(conjA); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
+            va = conteudo(auxVizV);
+            if(va->coberto!=1){
+                terminou = 0;
+                break;
+            }
+        }
+        
+        if(terminou != 1){
+            terminou = 1;
+            vertice filho = NULL;
+            while(terminou!=1){
+                lista filhos = vizinhanca(va,0,g);
+                for(no filhoNo=primeiro_no(filhos); filhoNo!=NULL; filhoNo=proximo_no(filhoNo)){
+                    filho = conteudo(filhoNo);
+                    if(filho->coberto==1 && filho->visitado!=1){
+                        terminou = 0;
+                        filho->visitado = 1;
+                        va->visitado = 1;
+                        insere_lista(filho,auxPath);
+                        
+                        adjacencia viz = malloc(sizeof(struct adjacencia));                       
+                        viz->v_origem = va;
+                        viz->v_destino = filho;
+                        insere_lista(viz,path);
+
+                        break;
+                    }
+                    else{
+                        adjacencia viz = malloc(sizeof(struct adjacencia));                       
+                        viz->v_origem = va;
+                        viz->v_destino = filho;
+                        insere_lista(viz,path);
+                        return path;
+                    }
+                }
+                va = filho;
+            }
+        }
+    }
+    return constroi_lista();
+}
+
 
 
 //------------------------------------------------------------------------------
@@ -1000,6 +1069,8 @@ grafo emparelhamento_maximo(grafo g){
         printf("Origem: %s\n",a->v_origem->nome);
         printf("Destino: %s\n",a->v_destino->nome);
     }
+
+    findAumentingPath(conjA,conjB,g);
 
     return g;
 }
