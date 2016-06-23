@@ -244,7 +244,7 @@ static void cria_vizinhanca(grafo g, vertice origem, vertice destino, long int p
         viz_1->peso = peso;
         viz_1->v_origem = origem;
         viz_1->v_destino = destino;
-		insere_lista(viz_1, origem->adjacencias_saida);
+	insere_lista(viz_1, origem->adjacencias_saida);
         origem->grau_saida++;
         destino->grau_entrada++;
  
@@ -1114,10 +1114,14 @@ grafo emparelhamento_maximo(grafo g){
 
     printf("\n\nEmparelhamentoMaximo:\n");
     for(no edgeNo=primeiro_no(edgeMatching); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
-        adjacencia a= conteudo(edgeNo);
+	adjacencia a = conteudo(edgeNo);
+	vertice origem = cria_vertice(e, a->v_origem->nome);
+	vertice destino = cria_vertice(e, a->v_destino->nome);
+	cria_vizinhanca(e, origem, destino, a->peso);
         printf("Origem: %s\n",a->v_origem->nome);
         printf("Destino: %s\n",a->v_destino->nome);
     }
+    
     
     return e;
 }
