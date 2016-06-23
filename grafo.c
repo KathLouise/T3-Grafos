@@ -1030,10 +1030,15 @@ static lista findAumentingPath(lista conjA, lista conjB, grafo g){
                     }
                 }
 		if(terminou){
-		    va = conteudo(primeiro_no(auxPath));
-		    remove_no(auxPath, primeiro_no(auxPath), NULL);
-		    remove_no(path, primeiro_no(path), NULL);
-		    terminou = 0;
+		    if (primeiro_no(auxPath) == NULL){
+			terminou = 1;
+		    }
+		    else {
+		    	va = conteudo(primeiro_no(auxPath));
+		    	remove_no(auxPath, primeiro_no(auxPath), NULL);
+		    	remove_no(path, primeiro_no(path), NULL);
+		    	terminou = 0;
+		    }
 		}
             }
         }
