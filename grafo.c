@@ -966,14 +966,14 @@ static void firstMatching(lista conjA, lista edgeMatching, grafo g){
         
 }
 
-/*static adjacencia findInMatching(lista edgeMatching, vertice v){
+static vertice findInMatching(lista edgeMatching, vertice v){
     for(no edgeNo=primeiro_no(edgeMatching); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
-        adjacencia a= conteudo(edgeNo);
-        if(strcmp(a->v_origem->nome, v->nome) || strcmp(a->v_destino->nome, v->nome))
-            return a;
+        adjacencia a = conteudo(edgeNo);
+        if(strcmp(a->v_destino->nome, v->nome) == 0)
+            return a->v_origem;
     }
     return NULL;
-}*/
+}
 
 static void resetVisitado(lista conjunto){
     for(no auxVizV=primeiro_no(conjunto); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
@@ -982,61 +982,89 @@ static void resetVisitado(lista conjunto){
     }
 }
 
-static lista findAumentingPath(lista conjA, lista conjB, grafo g){
-    int terminou = 0;
+static lista findAumentingPath(lista conjA, lista conjB, lista emp, grafo g){
+    int terminou = 1;
     lista auxPath = constroi_lista();
     lista path = constroi_lista();
-
+    vertice va = NULL;
+    vertice vb = NULL;
+    vertice filho = NULL;
+    
     resetVisitado(conjA);
     resetVisitado(conjB);
-    while(terminou!=1){
-        terminou = 1;
-        vertice va = NULL;
-        for(no auxVizV=primeiro_no(conjA); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
-            va = conteudo(auxVizV);
-            if(va->coberto!=1){
-                terminou = 0;
-                break;
-            }
-        }
-        
-        if(terminou != 1){
+    
+    for(no auxVizV=primeiro_no(conjA); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
+        va = conteudo(auxVizV);
+        if(va->coberto!=1 && va->passado !=1){
             terminou = 0;
-            vertice filho = NULL;
-            while(terminou!=1){
-		terminou = 1;
-                lista filhos = vizinhanca(va,0,g);
-                va->visitado = 1;
-                for(no filhoNo=primeiro_no(filhos); filhoNo!=NULL; filhoNo=proximo_no(filhoNo)){
-                    filho = conteudo(filhoNo);
-                    if(filho->coberto==1 && filho->visitado!=1){
-                        terminou = 0;
-                        filho->visitado = 1;
-                        insere_lista(va,auxPath);
-                        
-                        adjacencia viz = malloc(sizeof(struct adjacencia));                       
-                        viz->v_origem = va;
-                        viz->v_destino = filho;
-                        insere_lista(viz,path);
-                	va = filho;
-                        break;
-                    }
-                    else if (filho->coberto == 0 && filho->set != 0){
-                        adjacencia viz = malloc(sizeof(struct adjacencia));                       
-                        viz->v_origem = va;
-                        viz->v_destino = filho;
-                        insere_lista(viz,path);
-                        return path;
-                    }
-                }
-		if(terminou){
-		    va = conteudo(primeiro_no(auxPath));
-		    remove_no(auxPath, primeiro_no(auxPath), NULL);
-		    remove_no(path, primeiro_no(path), NULL);
-		    terminou = 0;
-		}
+            va->passado = 1;
+            break;
+        }
+    }
+    
+    for(no auxV=primeiro_no(conjB); auxV!=NULL; auxV=proximo_no(auxV)){
+        vb = conteudo(auxV);
+        if(vb->coberto!=1){
+            terminou = 0;
+            break;
+        }
+    }
+        
+    while(terminou!=1 && vb != NULL){
+        terminou = 1;
+        filho = NULL;
+        //caso: vertice coberto para vertice coberto
+        if(va->coberto == 1){
+            filho = findInMatching(emp, va);
+            if(filho != NULL && filho->visitado!=1){
+	            terminou = 0;
+                filho->visitado = 1;
+                insere_lista(va,auxPath);
+                adjacencia viz = malloc(sizeof(struct adjacencia));                       
+                viz->v_origem = va;
+                viz->v_destino = filho;
+                insere_lista(viz,path);
+                va = filho;
             }
         }
+        //caso: vertice inicial não coberto
+        if(filho == NULL || va->coberto == 0){
+            lista filhos = vizinhanca(va,0,g);
+            va->visitado = 1;
+            for(no filhoNo=primeiro_no(filhos); filhoNo!=NULL; filhoNo=proximo_no(filhoNo)){
+                filho = conteudo(filhoNo);
+                if(filho->coberto==1 && filho->visitado!=1){
+                    terminou = 0;
+                    filho->visitado = 1;
+                    insere_lista(va,auxPath);
+                    adjacencia viz = malloc(sizeof(struct adjacencia));                       
+                    viz->v_origem = va;
+                    viz->v_destino = filho;
+                    insere_lista(viz,path);
+                    va = filho;
+                    break;
+                }
+                else if (filho->coberto == 0 && filho->set != 0){
+                    adjacencia viz = malloc(sizeof(struct adjacencia));                       
+                    viz->v_origem = va;
+                    viz->v_destino = filho;
+                    insere_lista(viz,path);
+                    return path;
+                }
+            }
+        }
+        //caso: não achou o caminho certo, ou procura um proximo, mas se chegou ao final da lista retorna
+        if(terminou){
+            if (primeiro_no(auxPath) == NULL){
+                terminou = 1;
+            }
+            else {
+                va = conteudo(primeiro_no(auxPath));
+                remove_no(auxPath, primeiro_no(auxPath), NULL);
+                remove_no(path, primeiro_no(path), NULL);
+                terminou = 0;
+            }
+		}
     }
     return NULL;
 }
@@ -1061,13 +1089,18 @@ static void changeMatching(lista emp, lista path){
     }
 }
 
+static void resetFlag(lista conjunto){
+    for(no auxVizV=primeiro_no(conjunto); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
+        vertice va = conteudo(auxVizV);
+        va->passado = 0;
+    }
+
+}
 //------------------------------------------------------------------------------
 // devolve um grafo cujos vertices são cópias de vértices do grafo
 // bipartido g e cujas arestas formam um emparelhamento máximo em g
 //
 // não verifica se g é bipartido; caso não seja, o comportamento é indefinido
-
-// LINK do algoritmo: https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm#Algorithm
 
 grafo emparelhamento_maximo(grafo g){
     grafo e = cria_grafo(g->nome, g->direcionado, g->ponderado, (int) g->n_vertices);
@@ -1094,9 +1127,13 @@ grafo emparelhamento_maximo(grafo g){
         printf("Origem: %s\n",a->v_origem->nome);
         printf("Destino: %s\n",a->v_destino->nome);
     }
+    
+    resetFlag(conjA);
+    resetFlag(conjB);
 
     while(aumentingPath){
-    	path = findAumentingPath(conjA,conjB,g);
+        printf("\n0:\n");
+    	path = findAumentingPath(conjA,conjB, edgeMatching, g);
     	if(path != NULL){
 		printf("\n\nCaminho:\n");
     		for(no edgeNo=primeiro_no(path); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
@@ -1104,20 +1141,26 @@ grafo emparelhamento_maximo(grafo g){
         		printf("Origem: %s\n",a->v_origem->nome);
         		printf("Destino: %s\n",a->v_destino->nome);
     		}
-
+            printf("\n1:\n");
     		changeMatching(edgeMatching, path);
-	}
-	else{
-		aumentingPath = 0;
-	}
+    		for(no edgeNo=primeiro_no(edgeMatching); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
+                adjacencia a= conteudo(edgeNo);
+                printf("Origem: %s\n",a->v_origem->nome);
+                printf("Destino: %s\n",a->v_destino->nome);
+            }
+    		printf("\n2:\n");
+	    }
+	    else{
+		    aumentingPath = 0;
+	    }
     }
-
+    printf("\n3:\n");   
     printf("\n\nEmparelhamentoMaximo:\n");
     for(no edgeNo=primeiro_no(edgeMatching); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
-	adjacencia a = conteudo(edgeNo);
-	vertice origem = cria_vertice(e, a->v_origem->nome);
-	vertice destino = cria_vertice(e, a->v_destino->nome);
-	cria_vizinhanca(e, origem, destino, a->peso);
+	    adjacencia a = conteudo(edgeNo);
+	    vertice origem = cria_vertice(e, a->v_origem->nome);
+	    vertice destino = cria_vertice(e, a->v_destino->nome);
+	    cria_vizinhanca(e, origem, destino, a->peso);
         printf("Origem: %s\n",a->v_origem->nome);
         printf("Destino: %s\n",a->v_destino->nome);
     }

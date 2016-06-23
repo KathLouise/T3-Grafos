@@ -7,6 +7,7 @@ strict graph "6MaximumMatching" {
 	D -- L
 	D -- M
 	E -- J
+	E -- L
 	F -- L
 	F -- M
 	F -- P
