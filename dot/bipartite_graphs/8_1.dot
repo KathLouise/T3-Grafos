@@ -1,0 +1,11 @@
+strict graph grafo_8_1 {
+    x0 -- y0;
+    x1 -- y0;
+    x2 -- y0;
+    x3 -- y0;
+    x4 -- y0;
+    x5 -- y0;
+    x6 -- y0;
+    x7 -- y0;
+
+}

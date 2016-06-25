@@ -1096,6 +1096,17 @@ static void resetFlag(lista conjunto){
     }
 
 }
+
+static int allCovered(lista conjunto){
+    for(no auxVizV=primeiro_no(conjunto); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
+        vertice v = conteudo(auxVizV);
+        if(v->coberto == 0){
+            return 0;
+        }
+    }
+    return 1;
+}
+
 //------------------------------------------------------------------------------
 // devolve um grafo cujos vertices são cópias de vértices do grafo
 // bipartido g e cujas arestas formam um emparelhamento máximo em g
@@ -1107,6 +1118,8 @@ grafo emparelhamento_maximo(grafo g){
     lista conjA = constroi_lista();
     lista conjB = constroi_lista();
     lista path;
+    int allA = 0;
+    int allB = 0;
     int aumentingPath = 1;
 
     bipartido(conjA,conjB,g);
@@ -1127,11 +1140,26 @@ grafo emparelhamento_maximo(grafo g){
         printf("Origem: %s\n",a->v_origem->nome);
         printf("Destino: %s\n",a->v_destino->nome);
     }
-    
+
     resetFlag(conjA);
     resetFlag(conjB);
 
+   /* allA = allCovered(conjA);
+    allB = allCovered(conjB);
+
+    if(allA == 1 || allB == 1){
+        aumentingPath = 0;
+    }*/
+
     while(aumentingPath){
+        allA = allCovered(conjA);
+        allB = allCovered(conjB);
+
+        if(allA == 1 || allB == 1){
+            aumentingPath = 0;
+            break;
+        }
+        
         printf("\n0:\n");
     	path = findAumentingPath(conjA,conjB, edgeMatching, g);
     	if(path != NULL){
