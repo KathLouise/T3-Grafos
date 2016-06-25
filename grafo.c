@@ -897,6 +897,8 @@ int cordal(grafo g){
 }
 
 //------------------------------------------------------------------------------
+//Adiciona os vertices a uma das duas partições
+
 static int adicionaConjunto(lista conjOrigem, lista conjDestino, grafo g){
     int terminado = 1;
 
@@ -918,6 +920,9 @@ static int adicionaConjunto(lista conjOrigem, lista conjDestino, grafo g){
 
     return terminado;
 }
+
+//------------------------------------------------------------------------------
+//Separa o grafo em duas partições
 
 static void bipartido(lista conjA, lista conjB, grafo g){
     int terminado = 0;
@@ -943,12 +948,18 @@ static void bipartido(lista conjA, lista conjB, grafo g){
     }
 }
 
+//------------------------------------------------------------------------------
+//Adiciona o id do conjunto em que o vertice esta inserido
+
 static void settingConj(lista conj, int id){
     for(no auxVizVa=primeiro_no(conj); auxVizVa!=NULL; auxVizVa=proximo_no(auxVizVa)){
         vertice auxVa = conteudo(auxVizVa);
 	    auxVa->set = id;
     }
 }
+
+//------------------------------------------------------------------------------
+//Encontra um primeiro emparelhamento no grafo
 
 static void firstMatching(lista conjA, lista edgeMatching, grafo g){
     for(no auxVizV=primeiro_no(conjA); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
@@ -972,6 +983,11 @@ static void firstMatching(lista conjA, lista edgeMatching, grafo g){
         
 }
 
+//------------------------------------------------------------------------------
+//Procura um vertice de origem dentro da lista do primeiro emparelhamento
+//Se encontrar, retorna este vertice
+//Caso contrário, retorna NULL
+
 static vertice findInMatching(lista edgeMatching, vertice v){
     for(no edgeNo=primeiro_no(edgeMatching); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
         adjacencia a = conteudo(edgeNo);
@@ -981,12 +997,21 @@ static vertice findInMatching(lista edgeMatching, vertice v){
     return NULL;
 }
 
+//------------------------------------------------------------------------------
+//reseta para 0 a flag passado, pois ela será reutilizada
+
 static void resetVisitado(lista conjunto){
     for(no auxVizV=primeiro_no(conjunto); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
         vertice va = conteudo(auxVizV);
         va->visitado = 0;
     }
 }
+
+//------------------------------------------------------------------------------
+//Se houver um caminho de um vertice descoberto, procura um caminho que o ligue
+//até outro vertice do conjunto oposto que também esta descoberto
+//retorna o caminho, se tiver
+//retorna NULL, caso contrário
 
 static lista findAumentingPath(lista conjA, lista conjB, lista emp, grafo g){
     int terminou = 1;
@@ -1075,6 +1100,10 @@ static lista findAumentingPath(lista conjA, lista conjB, lista emp, grafo g){
     return NULL;
 }
 
+//------------------------------------------------------------------------------
+//Executar o xor entre a lista que contem o caminho aumentante e o primeiro 
+//emparelhamento encontrado
+
 static void changeMatching(lista emp, lista path){
     for(no pathNo=primeiro_no(path); pathNo!=NULL; pathNo=proximo_no(pathNo)){
         adjacencia a_path= conteudo(pathNo);
@@ -1097,6 +1126,9 @@ static void changeMatching(lista emp, lista path){
     }
 }
 
+//------------------------------------------------------------------------------
+//reseta para 0 a flag passado, pois ela será reutilizada
+
 static void resetFlag(lista conjunto){
     for(no auxVizV=primeiro_no(conjunto); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
         vertice va = conteudo(auxVizV);
@@ -1104,6 +1136,10 @@ static void resetFlag(lista conjunto){
     }
 
 }
+//------------------------------------------------------------------------------
+//Faz uma busca para verificar se todos os vertices da partição estão cobertos
+//retorna 1, se estiverem
+//retorna 0, caso contrario.
 
 static int allCovered(lista conjunto){
     for(no auxVizV=primeiro_no(conjunto); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
@@ -1164,7 +1200,6 @@ grafo emparelhamento_maximo(grafo g){
 	    vertice destino = cria_vertice(e, a->v_destino->nome);
 	    cria_vizinhanca(e, origem, destino, a->peso);
     }
-    
+	    
     return e;
 }
-
