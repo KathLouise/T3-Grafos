@@ -18,7 +18,7 @@ int main(void) {
   printf("%d arestas\n", n_arestas(g));
 
   grafo emparelhamento = emparelhamento_maximo(g);
-  escreve_grafo(stdout, g);
+//  escreve_grafo(stdout, g);
   escreve_grafo(stdout,emparelhamento);
   return ! (destroi_grafo(emparelhamento) && destroi_grafo(g));
 }

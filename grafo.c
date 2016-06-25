@@ -16,16 +16,16 @@
 // nó de lista encadeada cujo conteúdo é um void *
 
 struct no {
-  void *conteudo;
-  no proximo;
+    void *conteudo;
+    no proximo;
 };
 //------------------------------------------------------------------------------
 // lista encadeada
 
 struct lista {
-  unsigned int tamanho;
-  int padding; // só pra evitar warning 
-  no primeiro;
+    unsigned int tamanho;
+    int padding; // só pra evitar warning 
+    no primeiro;
 };
 //------------------------------------------------------------------------------
 //GRAFO
@@ -112,17 +112,16 @@ no proximo_no(no n) { return n->proximo; }
 // devolve NULL em caso de falha
 
 lista constroi_lista(void) {
+    lista l = malloc(sizeof(struct lista));
 
-  lista l = malloc(sizeof(struct lista));
+    if(!l) 
+        return NULL;
 
-  if ( ! l ) 
-    return NULL;
+    l->primeiro = NULL;
+    l->tamanho = 0;
 
-  l->primeiro = NULL;
-  l->tamanho = 0;
-
-  return l;
-  free(l);
+    return l;
+    free(l);
 }
 //---------------------------------------------------------------------------
 // desaloca a lista l e todos os seus nós
@@ -137,23 +136,19 @@ lista constroi_lista(void) {
 //      ou 0 em caso de falha
 
 int destroi_lista(lista l, int destroi(void *)) { 
-  
-  no p;
-  int ok=1;
+    no p;
+    int ok=1;
 
-  while ( (p = primeiro_no(l)) ) {
-    
-    l->primeiro = proximo_no(p);
+    while ((p = primeiro_no(l))) {
+        l->primeiro = proximo_no(p);
+        if(destroi)
+            ok &= destroi(conteudo(p));
 
-    if ( destroi )
-      ok &= destroi(conteudo(p));
+        free(p);
+    }
 
-    free(p);
-  }
-
-  free(l);
-
-  return ok;
+    free(l);
+    return ok;
 }
 //---------------------------------------------------------------------------
 // insere um novo nó na lista l cujo conteúdo é p
@@ -162,18 +157,17 @@ int destroi_lista(lista l, int destroi(void *)) {
 //      ou NULL em caso de falha
 
 no insere_lista(void *conteudo, lista l) { 
+    no novo = malloc(sizeof(struct no));
 
-  no novo = malloc(sizeof(struct no));
+    if(!novo) 
+        return NULL;
 
-  if ( ! novo ) 
-    return NULL;
-
-  novo->conteudo = conteudo;
-  novo->proximo = primeiro_no(l);
-  ++l->tamanho;
+    novo->conteudo = conteudo;
+    novo->proximo = primeiro_no(l);
+    ++l->tamanho;
   
-  return l->primeiro = novo;
-  free(novo);
+    return l->primeiro = novo;
+    free(novo);
 }
 
 //------------------------------------------------------------------------------
@@ -184,16 +178,19 @@ no insere_lista(void *conteudo, lista l) {
 
 int remove_no(struct lista *l, struct no *rno, int destroi(void *)) {
 	int r = 1;
-	if (l->primeiro == rno) {
+	
+    if (l->primeiro == rno) {
 		l->primeiro = rno->proximo;
 		if (destroi != NULL) {
 			r = destroi(conteudo(rno));
 		}
-		free(rno);
+		
+        free(rno);
 		l->tamanho--;
 		return r;
 	}
-	for (no n = primeiro_no(l); n->proximo; n = proximo_no(n)) {
+	
+    for (no n = primeiro_no(l); n->proximo; n = proximo_no(n)) {
 		if (n->proximo == rno) {
 			n->proximo = rno->proximo;
 			if (destroi != NULL) {
@@ -204,7 +201,8 @@ int remove_no(struct lista *l, struct no *rno, int destroi(void *)) {
 			return r;
 		}
 	}
-	return 0;
+	
+    return 0;
 }
 //------------------------------------------------------------------------------
 //GRAFO E VERTICE
@@ -239,12 +237,12 @@ static void cria_vizinhanca(grafo g, vertice origem, vertice destino, long int p
     adjacencia viz_1 = malloc(sizeof(struct adjacencia));
    
     if(viz_1 == NULL)
-    printf("Sem memoria");
+        printf("Sem memoria");
     else{
         viz_1->peso = peso;
         viz_1->v_origem = origem;
         viz_1->v_destino = destino;
-	insere_lista(viz_1, origem->adjacencias_saida);
+	    insere_lista(viz_1, origem->adjacencias_saida);
         origem->grau_saida++;
         destino->grau_entrada++;
  
@@ -254,7 +252,7 @@ static void cria_vizinhanca(grafo g, vertice origem, vertice destino, long int p
  
             adjacencia viz_2 = malloc(sizeof(struct adjacencia));
             if(viz_2 == NULL)
-            printf("Sem memoria");
+                printf("Sem memoria");
             else{
                 viz_2->peso = peso;
                 viz_2->v_origem = destino;
@@ -262,20 +260,21 @@ static void cria_vizinhanca(grafo g, vertice origem, vertice destino, long int p
                 insere_lista(viz_2, destino->adjacencias_saida);
                 destino->grau_saida++;
                 origem->grau_entrada++;
-                }
+            }
         }
-    else{
-        adjacencia viz_3 = malloc(sizeof(struct adjacencia));
+        else{
+            adjacencia viz_3 = malloc(sizeof(struct adjacencia));
             if(viz_3 == NULL)
-            printf("Sem memoria");
+                printf("Sem memoria");
             else{
                 viz_3->peso = peso;
                 viz_3->v_origem = origem;
                 viz_3->v_destino = destino;
                 insere_lista(viz_3, destino->adjacencias_entrada);
-                }
+            }
         }
     }
+
     g->n_arestas++;
 }
  
@@ -361,7 +360,7 @@ static int contem_pesos(Agraph_t *Ag) {
     char p_str[5];
     strcpy(p_str, "peso");
  
-    for ( Agsym_t *sym = agnxtattr(Ag, AGEDGE, NULL);
+    for(Agsym_t *sym = agnxtattr(Ag, AGEDGE, NULL);
         sym;
         sym = agnxtattr(Ag, AGEDGE, sym) ) {
         if (strcmp(sym->name, p_str) == 0)
@@ -451,13 +450,13 @@ grafo le_grafo(FILE *input){
             cria_vertice(g, agnameof(Av));
     }
  
-        for (Agnode_t *Av=agfstnode(Ag); Av; Av=agnxtnode(Ag,Av)) {
-            for (Agedge_t *Ae=agfstout(Ag,Av); Ae; Ae=agnxtout(Ag,Ae)) {
-                vertice u = v_busca(g, agnameof(agtail(Ae)));
-                vertice v = v_busca(g, agnameof(aghead(Ae)));
-                cria_vizinhanca(g, u, v, get_peso(Ae));
-            }
+    for (Agnode_t *Av=agfstnode(Ag); Av; Av=agnxtnode(Ag,Av)) {
+        for (Agedge_t *Ae=agfstout(Ag,Av); Ae; Ae=agnxtout(Ag,Ae)) {
+            vertice u = v_busca(g, agnameof(agtail(Ae)));
+            vertice v = v_busca(g, agnameof(aghead(Ae)));
+            cria_vizinhanca(g, u, v, get_peso(Ae));
         }
+    }
    
     agclose(Ag);
     agfree(Ag, NULL);
@@ -560,9 +559,10 @@ grafo copia_grafo(grafo g){
    
     grafo copy = cria_grafo(g->nome, g->direcionado, g->ponderado, (int)g->n_vertices);
  
-        if(copy == NULL){
-            printf("Sem memoria para alocar.\n");
-        }else{
+    if(copy == NULL){
+        printf("Sem memoria para alocar.\n");
+    }
+    else{
         copy->n_vertices = g->n_vertices;
         copy->n_arestas = g->n_arestas;
  
@@ -590,7 +590,6 @@ static lista vizinhanca_entrada(vertice v){
 // devolve a vizinhança de saída do vértice v
  
 static lista vizinhanca_saida(vertice v){
- 
     lista viz = constroi_lista();
     for (no n=primeiro_no(v->adjacencias_saida); n!=NULL; n=proximo_no(n)) {
         if(n != NULL){
@@ -666,11 +665,11 @@ static unsigned int findRemoved(lista l){
 //
 // um conjunto C de vértices de um grafo é uma clique em g
 // se todo vértice em C é vizinho de todos os outros vértices de C em g
- 
-    // faz um loop em cima de cada elemento da lista l      
-    // para cada elemento pega sua vizinhaca
-    // se a vizinhaca conter todos os elementos da lista l continua
-    // se não conter retorna 0
+
+// faz um loop em cima de cada elemento da lista l      
+// para cada elemento pega sua vizinhaca
+// se a vizinhaca conter todos os elementos da lista l continua
+// se não conter retorna 0
    
 int clique(lista l, grafo g){
     unsigned int removed = findRemoved(l);
@@ -821,6 +820,7 @@ lista busca_largura_lexicografica(grafo g){
 }
 //------------------------------------------------------------------------------
 // Procura o vertice v da vizinhaca de AuxN na lista léxica e retorna a posição dele em relação ao auxN.
+
 static int leftPosition (vertice w, no auxN){
     int index = 0;
     for(no auxViz=proximo_no(auxN); auxViz!=NULL; auxViz=proximo_no(auxViz)){
@@ -899,6 +899,7 @@ int cordal(grafo g){
 //------------------------------------------------------------------------------
 static int adicionaConjunto(lista conjOrigem, lista conjDestino, grafo g){
     int terminado = 1;
+
     for(no pai=primeiro_no(conjOrigem); pai!=NULL; pai=proximo_no(pai)){
         vertice auxV = conteudo(pai);
         if(auxV->passado == 0){
@@ -914,6 +915,7 @@ static int adicionaConjunto(lista conjOrigem, lista conjDestino, grafo g){
             }       
         }
     }
+
     return terminado;
 }
 
@@ -924,34 +926,38 @@ static void bipartido(lista conjA, lista conjB, grafo g){
     vertice v = vertices[0];        
     insere_lista(v,conjA);
     lista filhos = vizinhanca(v,0,g);
+
     for(no auxVizV=primeiro_no(filhos); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
         auxV = conteudo(auxVizV);
         insere_lista(auxV,conjB);   
         auxV->inSet = 1;     
     }
+
     v->inSet = 1;
     v->passado = 1;
+
     while(!terminado){
         terminado = 1;
         terminado = adicionaConjunto(conjB, conjA, g);
         terminado = adicionaConjunto(conjA, conjB, g);
     }
 }
+
 static void settingConj(lista conj, int id){
     for(no auxVizVa=primeiro_no(conj); auxVizVa!=NULL; auxVizVa=proximo_no(auxVizVa)){
         vertice auxVa = conteudo(auxVizVa);
-	auxVa->set = id;
-        printf("%s\n",auxVa->nome);
+	    auxVa->set = id;
     }
 }
 
 static void firstMatching(lista conjA, lista edgeMatching, grafo g){
-
     for(no auxVizV=primeiro_no(conjA); auxVizV!=NULL; auxVizV=proximo_no(auxVizV)){
         vertice v = conteudo(auxVizV);
         lista filhos = vizinhanca(v,0,g);
+
         for(no filhoNo=primeiro_no(filhos); filhoNo!=NULL; filhoNo=proximo_no(filhoNo)){
             vertice filho = conteudo(filhoNo);
+
             if(filho->coberto!=1){
                 filho->coberto = 1;
                 v->coberto = 1;
@@ -1070,22 +1076,24 @@ static lista findAumentingPath(lista conjA, lista conjB, lista emp, grafo g){
 }
 
 static void changeMatching(lista emp, lista path){
-
     for(no pathNo=primeiro_no(path); pathNo!=NULL; pathNo=proximo_no(pathNo)){
         adjacencia a_path= conteudo(pathNo);
+        
         for(no empNo=primeiro_no(emp); empNo!=NULL; empNo=proximo_no(empNo)){
         	adjacencia a_emp= conteudo(empNo);
-		if(strcmp(a_path->v_origem->nome, a_emp->v_origem->nome) == 0){
-			a_emp->v_destino->coberto = 0;
-			a_emp->v_destino = a_path->v_destino;
-			a_emp->v_destino->coberto = 1;
-		}
-		else if((a_path->v_origem->coberto == 0) && (a_path->v_destino->coberto == 0)){
-			a_path->v_origem->coberto = 1;
-			a_path->v_destino->coberto = 1;
-			insere_lista(a_path, emp);
-		}
-	}
+		
+            if(strcmp(a_path->v_origem->nome, a_emp->v_origem->nome) == 0){
+			    a_emp->v_destino->coberto = 0;
+			    a_emp->v_destino = a_path->v_destino;
+			    a_emp->v_destino->coberto = 1;
+		    }
+		
+            else if((a_path->v_origem->coberto == 0) && (a_path->v_destino->coberto == 0)){
+			    a_path->v_origem->coberto = 1;
+			    a_path->v_destino->coberto = 1;
+			    insere_lista(a_path, emp);
+		    }
+	    }
     }
 }
 
@@ -1118,38 +1126,20 @@ grafo emparelhamento_maximo(grafo g){
     lista conjA = constroi_lista();
     lista conjB = constroi_lista();
     lista path;
+    lista edgeMatching = constroi_lista();
     int allA = 0;
     int allB = 0;
     int aumentingPath = 1;
 
     bipartido(conjA,conjB,g);
    
-    printf("Conjunto A:\n");
     settingConj(conjA, 0);
-   
-    printf("\n\nConjunto B:\n");
     settingConj(conjB, 1);
-
-    lista edgeMatching = constroi_lista();
 
     firstMatching(conjA, edgeMatching, g);
 
-    printf("\n\nLigacoes:\n");
-    for(no edgeNo=primeiro_no(edgeMatching); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
-        adjacencia a= conteudo(edgeNo);
-        printf("Origem: %s\n",a->v_origem->nome);
-        printf("Destino: %s\n",a->v_destino->nome);
-    }
-
     resetFlag(conjA);
     resetFlag(conjB);
-
-   /* allA = allCovered(conjA);
-    allB = allCovered(conjB);
-
-    if(allA == 1 || allB == 1){
-        aumentingPath = 0;
-    }*/
 
     while(aumentingPath){
         allA = allCovered(conjA);
@@ -1160,39 +1150,20 @@ grafo emparelhamento_maximo(grafo g){
             break;
         }
         
-        printf("\n0:\n");
     	path = findAumentingPath(conjA,conjB, edgeMatching, g);
     	if(path != NULL){
-		printf("\n\nCaminho:\n");
-    		for(no edgeNo=primeiro_no(path); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
-       			adjacencia a= conteudo(edgeNo);
-        		printf("Origem: %s\n",a->v_origem->nome);
-        		printf("Destino: %s\n",a->v_destino->nome);
-    		}
-            printf("\n1:\n");
     		changeMatching(edgeMatching, path);
-    		for(no edgeNo=primeiro_no(edgeMatching); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
-                adjacencia a= conteudo(edgeNo);
-                printf("Origem: %s\n",a->v_origem->nome);
-                printf("Destino: %s\n",a->v_destino->nome);
-            }
-    		printf("\n2:\n");
 	    }
 	    else{
 		    aumentingPath = 0;
 	    }
     }
-    printf("\n3:\n");   
-    printf("\n\nEmparelhamentoMaximo:\n");
     for(no edgeNo=primeiro_no(edgeMatching); edgeNo!=NULL; edgeNo=proximo_no(edgeNo)){
 	    adjacencia a = conteudo(edgeNo);
 	    vertice origem = cria_vertice(e, a->v_origem->nome);
 	    vertice destino = cria_vertice(e, a->v_destino->nome);
 	    cria_vizinhanca(e, origem, destino, a->peso);
-        printf("Origem: %s\n",a->v_origem->nome);
-        printf("Destino: %s\n",a->v_destino->nome);
     }
-    
     
     return e;
 }
